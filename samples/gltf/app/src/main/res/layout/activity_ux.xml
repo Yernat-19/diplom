@@ -17,11 +17,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".GltfActivity">
+    tools:context="kz.mussin.oyinshyq.sceneform.samples.gltf.GltfActivity">
 
   <fragment android:name="com.google.ar.sceneform.ux.ArFragment"
       android:id="@+id/ux_fragment"
       android:layout_width="match_parent"
       android:layout_height="match_parent" />
+  <Button
+      android:layout_width="wrap_content"
+      android:layout_height="50dp"
+
+      android:drawableStart="@drawable/ic_back"
+      android:background="@drawable/back_button_bg"
+      android:layout_marginTop="20dp"
+      android:layout_marginStart="30dp"
+      android:textColor="@color/primary"
+      android:text="Артқа қайту"
+     android:id="@+id/ar_back_button"/>
 
 </FrameLayout>

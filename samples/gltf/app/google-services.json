@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1054728441868",
+    "firebase_url": "https://oyinshyq-default-rtdb.firebaseio.com",
+    "project_id": "oyinshyq",
+    "storage_bucket": "oyinshyq.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1054728441868:android:931e18b5048614be731e29",
+        "android_client_info": {
+          "package_name": "kz.mussin.ar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1054728441868-nee3gnk8v6qpohe4qivb12d16l3lb1oh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJPmNg5w0QBCdBavyCoaiXG2qy7e9zQbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1054728441868-nee3gnk8v6qpohe4qivb12d16l3lb1oh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

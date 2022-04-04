@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.ar.sceneform.samples.gltf;
+package kz.mussin.ar.sceneform.samples.gltf;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -24,11 +24,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.ArraySet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.filament.gltfio.Animator;
 import com.google.android.filament.gltfio.FilamentAsset;
@@ -37,12 +39,14 @@ import com.google.ar.core.HitResult;
 import com.google.ar.core.Plane;
 import com.google.ar.sceneform.AnchorNode;
 import com.google.ar.sceneform.Node;
+import com.google.ar.sceneform.collision.Box;
 import com.google.ar.sceneform.math.Vector3;
 import com.google.ar.sceneform.rendering.Color;
 import com.google.ar.sceneform.rendering.Material;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.Renderable;
 import com.google.ar.sceneform.rendering.ViewRenderable;
+import com.google.ar.sceneform.samples.gltf.R;
 import com.google.ar.sceneform.ux.ArFragment;
 import com.google.ar.sceneform.ux.TransformableNode;
 import java.lang.ref.WeakReference;
@@ -59,7 +63,9 @@ public class GltfActivity extends AppCompatActivity {
 
   private ArFragment arFragment;
   private Renderable renderable;
-
+  private Button backButton;
+  private TransformableNode model;
+  private boolean isFirst = true;
   private static class AnimationInstance {
     Animator animator;
     Long startTime;
@@ -100,15 +106,16 @@ public class GltfActivity extends AppCompatActivity {
     }
 
     setContentView(R.layout.activity_ux);
+    backButton = findViewById(R.id.ar_back_button);
+    backButton.setOnClickListener(backListener);
     arFragment = (ArFragment) getSupportFragmentManager().findFragmentById(R.id.ux_fragment);
-
+    String modelUrl = getIntent().getStringExtra("modelUrl");
     WeakReference<GltfActivity> weakActivity = new WeakReference<>(this);
 
     ModelRenderable.builder()
         .setSource(
             this,
-            Uri.parse(
-                "https://storage.googleapis.com/ar-answers-in-search-models/static/Tiger/model.glb"))
+            Uri.parse(modelUrl))
         .setIsFilamentGltf(true)
         .build()
         .thenAccept(
@@ -121,7 +128,7 @@ public class GltfActivity extends AppCompatActivity {
         .exceptionally(
             throwable -> {
               Toast toast =
-                  Toast.makeText(this, "Unable to load Tiger renderable", Toast.LENGTH_LONG);
+                  Toast.makeText(this, "Unable to load Model", Toast.LENGTH_LONG);
               toast.setGravity(Gravity.CENTER, 0, 0);
               toast.show();
               return null;
@@ -138,8 +145,17 @@ public class GltfActivity extends AppCompatActivity {
           AnchorNode anchorNode = new AnchorNode(anchor);
           anchorNode.setParent(arFragment.getArSceneView().getScene());
 
+          if(!isFirst){
+              arFragment.getArSceneView().getScene().removeChild(model);
+              model = null;
+
+          }
+            isFirst = false;
+
           // Create the transformable model and add it to the anchor.
-          TransformableNode model = new TransformableNode(arFragment.getTransformationSystem());
+          model = new TransformableNode(arFragment.getTransformationSystem());
+            model.getScaleController().setMaxScale(0.02f);
+            model.getScaleController().setMinScale(0.01f);
           model.setParent(anchorNode);
           model.setRenderable(renderable);
           model.select();
@@ -199,6 +215,19 @@ public class GltfActivity extends AppCompatActivity {
    *
    * <p>Finishes the activity if Sceneform can not run
    */
+  private View.OnClickListener backListener = new View.OnClickListener() {
+      @Override
+      public void onClick(View view) {
+          GltfActivity.super.onBackPressed();
+      }
+  };
+    @Override
+    public void onBackPressed() {
+        arFragment.getArSceneView().getScene().removeChild(model);
+        model = null;
+        super.onBackPressed();
+        finish();
+    }
   public static boolean checkIsSupportedDeviceOrFinish(final Activity activity) {
     if (Build.VERSION.SDK_INT < VERSION_CODES.N) {
       Log.e(TAG, "Sceneform requires Android N or later");

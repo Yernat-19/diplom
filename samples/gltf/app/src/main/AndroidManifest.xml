@@ -44,7 +44,14 @@
         <meta-data android:name="com.google.ar.core" android:value="required" />
 
         <activity
-            android:name=".GltfActivity"
+            android:name="kz.mussin.ar.sceneform.samples.gltf.GltfActivity"
+            android:label="@string/app_name"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="locked"
+            android:exported="true">
+        </activity><activity
+            android:name="kz.mussin.ar.main.MainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize"
             android:theme="@style/Theme.AppCompat.NoActionBar"
